@@ -68,6 +68,7 @@ public class FirebasePlayFragment extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 UserDatabaseInformation messageObject = dataSnapshot.getValue(UserDatabaseInformation.class);
                 postdata.add(messageObject);
+                Log.i("mytag",dataSnapshot.toString());
                 recyclerViewadapter.notifyDataSetChanged();
             }
 
@@ -105,139 +106,142 @@ public class FirebasePlayFragment extends AppCompatActivity {
 
     }
 
-    public class RenderCustomAdapterPlay extends ArrayAdapter<UserDatabaseInformation>  {
-
-        private Context mcontext;
-
-        private ArrayList<UserDatabaseInformation> postdata = new ArrayList<>();
-        private ArrayList<UserDatabaseInformation> filterdata = new ArrayList<>();
-
-        public RenderCustomAdapterPlay(Context context, ArrayList<UserDatabaseInformation> postdata) {
-            super(context, R.layout.firebaseplaytemplate, postdata);
-            mcontext = context;
-            this.postdata = postdata;
-            this.filterdata = postdata;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            View mView = convertView;
-            if (convertView == null) {
-
-                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-                mView = layoutInflater.inflate(R.layout.firebaseplaytemplate, parent, false);
-            }
-
-            ImageView firebaseplay = (ImageView) mView.findViewById(R.id.firebaseplay);
-
-            final TextView firebaseSongName = (TextView) mView.findViewById(R.id.firebaseSongName);
-
-            firebaseSongName.setText(postdata.get(position).getUploadingSongName());
-
-            firebaseplay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    TextView firebaseSongDisplay = (TextView) findViewById(R.id.firebaseSongDisplay);
-                    TextView firebaseUploaderName = (TextView) findViewById(R.id.firebaseUploaderName);
-
-                    firebaseSongDisplay.setText(postdata.get(position).getUploadingSongName());
-                    firebaseUploaderName.setText("Uploaded By: " + postdata.get(position).getUploaderUserName());
-
-
-                    if ((mediaPlayer == null)) {
-
-
-                        //for the first time instanc creation
-                        mediaPlayer = new MediaPlayer();
-                        mediaPlayer.reset();
-                        mediaPlayer.stop();
-
-                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        try {
-                            mediaPlayer.setDataSource(postdata.get(position).getUploadingFilePath());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mediaPlayer) {
-                                mediaPlayer.start();
-
-                            }
-                        });
-                        mediaPlayer.prepareAsync();
-                    } else {
-                        ;
-                        //resets previous playing mediaplayer
-                        mediaPlayer.reset();
-                        mediaPlayer.stop();
-
-                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        try {
-                            mediaPlayer.setDataSource(postdata.get(position).getUploadingFilePath());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                            @Override
-                            public void onPrepared(MediaPlayer mediaPlayer) {
-                                mediaPlayer.start();
-
-                            }
-                        });
-                        mediaPlayer.prepareAsync();
-
-                    }
-
-                }
-            });
-
-
-            return mView;
-        }
-
-        @NonNull
-        @Override
-        public Filter getFilter() {
-            return new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence charSequence) {
-                    FilterResults filterResults = new FilterResults();
-
-
-                    if (charSequence != null && charSequence.length() > 0) {
-                        charSequence = charSequence.toString().toLowerCase();
-                        ArrayList<UserDatabaseInformation> filterPost=new ArrayList<>();
-
-                        for (int i=0;i<filterdata.size();i++) {
-                            if(filterdata.get(i).getUploadingSongName().toLowerCase().contains(charSequence)){
-                                filterPost.add(filterdata.get(i));//add that particular object
-                            }
-                        }
-                        filterResults.count=filterPost.size();
-                        filterResults.values=filterPost;
-                    }else{
-                        filterResults.count=filterdata.size();
-                        filterResults.values=filterdata;
-                    }
-
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-
-                      postdata=(ArrayList<UserDatabaseInformation>) filterResults.values;
-
-                    if(postdata!=null){
-                        notifyDataSetChanged();
-                    }
-                }
-            };
-        }
-    }
+//    public class RenderCustomAdapterPlay extends ArrayAdapter<UserDatabaseInformation>  {
+//
+//        private Context mcontext;
+//
+//        private ArrayList<UserDatabaseInformation> postdata = new ArrayList<>();
+//        private ArrayList<UserDatabaseInformation> filterdata = new ArrayList<>();
+//
+//        public RenderCustomAdapterPlay(Context context, ArrayList<UserDatabaseInformation> postdata) {
+//            super(context, R.layout.firebaseplaytemplate, postdata);
+//            mcontext = context;
+//            this.postdata = postdata;
+//            this.filterdata = postdata;
+//        }
+//
+//        @Override
+//        public View getView(final int position, View convertView, ViewGroup parent) {
+//
+//            View mView = convertView;
+//            if (convertView == null) {
+//
+//                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+//                mView = layoutInflater.inflate(R.layout.firebaseplaytemplate, parent, false);
+//            }
+//
+//            ImageView firebaseplay = (ImageView) mView.findViewById(R.id.firebaseplay);
+//
+//            final TextView firebaseSongName = (TextView) mView.findViewById(R.id.firebaseSongName);
+//
+//            firebaseSongName.setText(postdata.get(position).getUploadingSongName());
+//
+//            firebaseplay.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    TextView firebaseSongDisplay = (TextView) findViewById(R.id.firebaseSongDisplay);
+//                    TextView firebaseUploaderName = (TextView) findViewById(R.id.firebaseUploaderName);
+//
+//                    firebaseSongDisplay.setText(postdata.get(position).getUploadingSongName());
+//                    firebaseUploaderName.setText("Uploaded By: " + postdata.get(position).getUploaderUserName());
+//
+//
+//                    if ((mediaPlayer == null)) {
+//
+//
+//                        //for the first time instanc creation
+//                        mediaPlayer = new MediaPlayer();
+//                        mediaPlayer.reset();
+//                        mediaPlayer.stop();
+//
+//                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                        try {
+//                            mediaPlayer.setDataSource(postdata.get(position).getUploadingFilePath());
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                            @Override
+//                            public void onPrepared(MediaPlayer mediaPlayer) {
+//                                mediaPlayer.start();
+//
+//                            }
+//                        });
+//                        mediaPlayer.prepareAsync();
+//                    } else {
+//                        ;
+//                        //resets previous playing mediaplayer
+//                        mediaPlayer.reset();
+//                        mediaPlayer.stop();
+//
+//                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                        try {
+//                            mediaPlayer.setDataSource(postdata.get(position).getUploadingFilePath());
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                            @Override
+//                            public void onPrepared(MediaPlayer mediaPlayer) {
+//                                mediaPlayer.start();
+//
+//                            }
+//                        });
+//                        mediaPlayer.prepareAsync();
+//
+//                    }
+//
+//                }
+//            });
+//
+//
+//            return mView;
+//        }
+//
+//        @NonNull
+//        @Override
+//        public Filter getFilter() {
+//            return new Filter() {
+//                @Override
+//                protected FilterResults performFiltering(CharSequence charSequence) {
+//                    FilterResults filterResults = new FilterResults();
+//
+//
+//                    //if users types something
+//                    if (charSequence != null && charSequence.length() > 0) {
+//                        charSequence = charSequence.toString().toLowerCase(); //convert typed text to lowercase
+//                        //to make the search easy tp compare
+//                        ArrayList<UserDatabaseInformation> filterPost=new ArrayList<>();//temporary items holder
+//
+//                        //filter data is whole lists of songs
+//                        for (int i=0;i<filterdata.size();i++) {
+//                            if(filterdata.get(i).getUploadingSongName().toLowerCase().contains(charSequence)){
+//                                filterPost.add(filterdata.get(i));//add that particular object
+//                            }
+//                        }
+//                        filterResults.count=filterPost.size();
+//                        filterResults.values=filterPost;
+//                    }else{
+//                        filterResults.count=filterdata.size();
+//                        filterResults.values=filterdata;
+//                    }
+//
+//                    return filterResults;//it then calls pubklish results method
+//                }
+//
+//                @Override
+//                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+//
+//                      postdata=(ArrayList<UserDatabaseInformation>) filterResults.values;
+//
+//                    if(postdata!=null){
+//                        notifyDataSetChanged(); //display the searched items
+//                    }
+//                }
+//            };
+//        }
+//    }
 
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
@@ -256,6 +260,7 @@ public class FirebasePlayFragment extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextChange(String s) {
 
+                    //search algorithm
                     s=s.toLowerCase();
                     List<UserDatabaseInformation> newList=new ArrayList<>();
                     for(UserDatabaseInformation each:postdata){

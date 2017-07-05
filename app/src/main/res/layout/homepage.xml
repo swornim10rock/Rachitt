@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:id="@+id/homepageid"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/background_dark"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/all"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_chrome_reader_mode_white_48dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,131 +22,47 @@
             android:orientation="vertical">
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/rockImage"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:background="@android:color/background_dark"
-                    android:src="@drawable/audioslave4" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/background_dark"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:id="@+id/homepagetemplateDetais1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_chrome_reader_mode_white_24dp"
-
-                        />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                    android:src="@drawable/rock" />
 
                 <ImageView
+                    android:id="@+id/classicalRockImage"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_below="@id/rockImage"
                     android:background="@android:color/background_dark"
-                    android:src="@drawable/michael7" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/background_dark"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:id="@+id/homepagetemplateDetais2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_chrome_reader_mode_white_24dp"
-
-                        />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                    android:src="@drawable/classicalrock" />
 
                 <ImageView
+                    android:id="@+id/melodyImage"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_below="@id/classicalRockImage"
                     android:background="@android:color/background_dark"
-                    android:src="@drawable/audioslave1" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/background_dark"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:id="@+id/homepagetemplateDetais3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_chrome_reader_mode_white_24dp"
-
-                        />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                    android:src="@drawable/meoldu" />
 
                 <ImageView
+                    android:id="@+id/bluesImage"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:layout_below="@id/melodyImage"
                     android:background="@android:color/background_dark"
-                    android:src="@drawable/audioslave3" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/background_dark"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:id="@+id/homepagetemplateDetais4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_chrome_reader_mode_white_24dp"
-
-                        />
+                    android:src="@drawable/blues" />
 
 
-                </LinearLayout>
-
-
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
+
 
     </ScrollView>
 

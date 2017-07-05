@@ -2,11 +2,15 @@ package com.example.swornim.rachit;
 
 import android.media.MediaPlayer;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Swornim on 5/23/2017.
  */
 
-public class UserDatabaseInformation {
+public class UserDatabaseInformation implements Serializable{
 
     private String uploadingSongName;
     private String uploaderUserName;
@@ -15,7 +19,26 @@ public class UserDatabaseInformation {
     private String firebaseSongsDurations;
     private String firebaseSongsUploaderName;
     private static MediaPlayer mediaPlayer;
+    private List<UserDatabaseInformation> filteredData=new ArrayList<>();
 
+
+    public List<UserDatabaseInformation> getFilteredData() {
+        return filteredData;
+    }
+
+    public void setFilteredData(List<UserDatabaseInformation> filteredData) {
+        this.filteredData = filteredData;
+    }
+
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public static MediaPlayer getMediaPlayer() {
         return mediaPlayer;
