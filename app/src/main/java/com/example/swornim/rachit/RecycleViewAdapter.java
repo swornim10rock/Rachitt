@@ -141,5 +141,12 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         notifyDataSetChanged();
     }
 
+    public void reloadOriginalData(List<UserDatabaseInformation> original){
+        postdata=original;
+        notifyDataSetChanged();
+
+    }
+
+
 
 }

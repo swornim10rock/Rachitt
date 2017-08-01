@@ -32,6 +32,7 @@ public class HomePage extends AppCompatActivity {
     private DatabaseReference mDatabaseReferences;
     UserDatabaseInformation filterDataObject=new UserDatabaseInformation();
     private ImageView all;
+    private String S;
 
 
 
@@ -49,8 +50,8 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
-        mDatabaseReferences = FirebaseDatabase.getInstance().getReference("users/");
-        mDatabaseReferences.child("musicnap/songlist/").addChildEventListener(new ChildEventListener() {
+        mDatabaseReferences = FirebaseDatabase.getInstance().getReference();
+        mDatabaseReferences.child("songlist/").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 UserDatabaseInformation messageObject = dataSnapshot.getValue(UserDatabaseInformation.class);
@@ -120,8 +121,6 @@ public class HomePage extends AppCompatActivity {
         });
         getSupportActionBar().setTitle("Home Page");
 
-
-
     }
 
 
@@ -130,9 +129,11 @@ public class HomePage extends AppCompatActivity {
         List<UserDatabaseInformation> tempList=new ArrayList<>();
         for(int i=0;i<postdata.size();i++){
 
-            if(postdata.get(i).getType().equals(type)){
-                Log.i("mytag",postdata.get(i).getType());
-                tempList.add(postdata.get(i));
+            if(postdata.get(i).getType()!=null) {
+                if (postdata.get(i).getType().equals(type)) {
+                    Log.i("mytag", postdata.get(i).getType());
+                    tempList.add(postdata.get(i));
+                }
             }
         }
         filterDataObject.setFilteredData(tempList);
@@ -144,6 +145,7 @@ public class HomePage extends AppCompatActivity {
 
             Intent intent = new Intent(HomePage.this, MyFavourite.class);
             intent.putExtra("messageObject", filterDataObject);
+            intent.putExtra("type", type);
             startActivity(intent);
             //send filtered data object
         }else

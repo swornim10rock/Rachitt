@@ -20,7 +20,15 @@ public class UserDatabaseInformation implements Serializable{
     private String firebaseSongsUploaderName;
     private static MediaPlayer mediaPlayer;
     private List<UserDatabaseInformation> filteredData=new ArrayList<>();
+    private List<String> recommendationSong=new ArrayList<>();
 
+    public List<String> getRecommendationSong() {
+        return recommendationSong;
+    }
+
+    public void setRecommendationSong(List<String> recommendationSong) {
+        this.recommendationSong = recommendationSong;
+    }
 
     public List<UserDatabaseInformation> getFilteredData() {
         return filteredData;

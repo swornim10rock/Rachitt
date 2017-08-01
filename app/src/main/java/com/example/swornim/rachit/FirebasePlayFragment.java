@@ -13,12 +13,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -32,6 +35,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,6 +55,7 @@ public class FirebasePlayFragment extends AppCompatActivity {
     private RecyclerView recycleView;
     private RecyclerView.LayoutManager layoutManager;
     private List<UserDatabaseInformation> postdata=new ArrayList<>();
+    private List<UserDatabaseInformation> originalPostdataHolder=new ArrayList<>();
 
 
     @Override
@@ -62,12 +67,13 @@ public class FirebasePlayFragment extends AppCompatActivity {
 //        firebaseListView.setAdapter(adapter);
 //        firebaseListView.setTextFilterEnabled(true);
 
-        mDatabaseReferences = FirebaseDatabase.getInstance().getReference("users/");
-        mDatabaseReferences.child("musicnap/songlist/").addChildEventListener(new ChildEventListener() {
+        mDatabaseReferences = FirebaseDatabase.getInstance().getReference();
+        mDatabaseReferences.child("songlist/").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 UserDatabaseInformation messageObject = dataSnapshot.getValue(UserDatabaseInformation.class);
                 postdata.add(messageObject);
+                originalPostdataHolder.add(messageObject);
                 Log.i("mytag",dataSnapshot.toString());
                 recyclerViewadapter.notifyDataSetChanged();
             }
@@ -249,7 +255,17 @@ public class FirebasePlayFragment extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.menu, menu);
             MenuItem menuItem = menu.findItem(R.id.menuId);
 
-            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+            final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+             ImageView cancelImage = (ImageView) searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+
+            cancelImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recyclerViewadapter.reloadOriginalData(originalPostdataHolder);
+
+                    Toast.makeText(getApplicationContext(),"cancel",Toast.LENGTH_LONG).show();
+                }
+            });
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -258,15 +274,31 @@ public class FirebasePlayFragment extends AppCompatActivity {
                 }
 
                 @Override
-                public boolean onQueryTextChange(String s) {
+                public boolean onQueryTextChange(String searching) {
 
                     //search algorithm
-                    s=s.toLowerCase();
+                    searching=searching.toLowerCase();
                     List<UserDatabaseInformation> newList=new ArrayList<>();
+                    String matched="nope";//intitial flag
                     for(UserDatabaseInformation each:postdata){
-                        if(each.getUploadingSongName().toLowerCase().contains(s)){
-                            newList.add(each);
+
+                        String eachString=each.getUploadingSongName().toLowerCase();
+                        for(int i=0;i<eachString.length();i++){
+
+                            for(int j=i;j<searching.length();j++){
+                                if(eachString.charAt(j)==searching.charAt(j)){
+                                    matched="yup";
+                                }else{
+                                    matched="nope";
+                                    break;
+                                }
+                            }
                         }
+                        if(matched.equals("yup"))
+                            newList.add(each);
+//                        if(each.getUploadingSongName().toLowerCase().contains(s)){
+//                            newList.add(each);
+//                        }
                     }
                     recyclerViewadapter.setfiler(newList);
                     return false;
